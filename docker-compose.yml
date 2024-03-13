@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  be:
+    container_name: perspective_be
+    env_file:
+      - ./.env
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "4111:4111"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      - perspective
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - perspective
+
+networks:
+  perspective:
