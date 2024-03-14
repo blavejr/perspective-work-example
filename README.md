@@ -105,11 +105,34 @@ for this controller by looking at the instance type.
 this way we can automatically inject all decencies right into the
 system when we start up the server.
 
+I actually forgot to add pagination and formatted responses 😬
+
 # Example: inbound data
 you create a user via REST POST /user.
 The controller gathers the data describing 
 your user and invokes a "create-user" use case 
-in the User context. The use case, in turn, calls the UserService in
+in the User context. The use case, in turn, 
+calls the UserService which will take the plain data
+entered create a user entity this entity (an instance of
+the user calls, the entity is than passed onto the repository
+the repository is responsible for saving the entity to a data store.
+
+# Exanple: outbound data
+you make a request for all the users via REST GET /user
+in this case the data sent via query params will mostly 
+follow the same path as above but no new user is created
+the user service requests the repository to make a query
+the repository will return an array of MongoDB documents
+these documents are than parsed by the services and converted
+into actual user instances before being returned to the use case
+the use-case (get-all-users) will than return to the Controller
+a new array of objects by calling the User.toJSON method.
+
+The idea is that internally in the application layer we only
+work with entities, these entities encapsulate everything they need
+validation, entity specific logic etc when the application needs to give data
+to the outside it can simply request a safe json representation of
+the entity to share via toJSON
 
 
 # Getting Started
