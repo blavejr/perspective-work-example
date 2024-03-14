@@ -141,6 +141,32 @@ all you need to get started. Docker will spin up
 - a mongodb container
 - the application nodejs container, running alpine node 21
 
+# Testing
+There are unit tests covering most of the application
+since its built with clean architecture its very easy to
+isolate and test specific components, I've used jest for 
+the testing.
+
+# Error handling
+All parts of the application are allowed to throw errors 
+these errors will be caught in our error handling middleware
+and formatted into an appropriate http response.
+
+There are custom error types as well in our domain layer
+
+# Data Validation
+data is validated in multiple layers
+1. The http layer validates all data coming in through its
+endpoints using yup, the helps catch and reject requests early
+on before they even cause load onto our application.
+
+2. donain entities are also responsible for validating all data
+passed to them especially during instantiation, the entity knows
+which data it needs and can reject bad data
+
+3. database layer also validates data via its schema and can also reject 
+malformed data
+
 # Getting Started
 1. setup your environment, copy the `.env.example` to a new file `.env`
 2. install the dependencies `npm i`
