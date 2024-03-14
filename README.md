@@ -134,6 +134,12 @@ validation, entity specific logic etc when the application needs to give data
 to the outside it can simply request a safe json representation of
 the entity to share via toJSON
 
+# Setup and Docker
+The app is dockerized and orchastrated with
+docker-compose, a simple docker-compose up is
+all you need to get started. Docker will spin up
+- a mongodb container
+- the application nodejs container, running alpine node 21
 
 # Getting Started
 1. setup your environment, copy the `.env.example` to a new file `.env`
