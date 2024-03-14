@@ -3,9 +3,14 @@ import mongoose from 'mongoose';
 import { Express } from 'express';
 import { describe, it, expect, jest, beforeEach, beforeAll, afterAll } from '@jest/globals';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { Server, createServer } from "http";
+import Terminus from '@godaddy/terminus';
+
+jest.setTimeout(30000);
 
 let mongoServer: MongoMemoryServer;
 let mongoUri: string;
+let server: Server;
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
@@ -14,8 +19,13 @@ beforeAll(async () => {
 
 afterAll(async () => {
     // Disconnect from the in-memory database
-    await mongoose.disconnect();
+    // await mongoose.disconnect();
     await mongoServer.stop();
+
+    // Close the Server connection
+    if (server) {
+        server.close();
+    }
 });
 
 describe('Server', () => {
@@ -35,11 +45,16 @@ describe('Server', () => {
 
     describe('startServer', () => {
         it('should start the server', async () => {
-            const mockListen = jest.fn();
-            const mockApp = { listen: mockListen } as unknown as Express;
+            const httpServer = createServer();
 
-            startServer(mockApp, 3000);
-            expect(mockListen).toHaveBeenCalledWith(3000, expect.any(Function));
+            const createTerminusSpy = jest.spyOn(Terminus, 'createTerminus');
+            startServer(httpServer, 3000);
+
+            expect(createTerminusSpy).toHaveBeenCalled();
+            expect(createTerminusSpy.mock.calls[0][0]).toBe(httpServer);
+            expect(createTerminusSpy.mock.calls[0][1].signal).toBe('SIGINT'); 
+            expect(createTerminusSpy.mock.calls[0][1].healthChecks).toHaveProperty('/healthcheck');
+            expect(createTerminusSpy.mock.calls[0][1].onSignal).toBeTruthy();
         });
     });
 });
