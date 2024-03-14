@@ -4,6 +4,7 @@ import GetAllUsersUseCase from '../../../application/use-cases/user/get-all-user
 import UserRepository from '../../outbound/database/mongoose/user.repository';
 import UserModel from '../../outbound/database/mongoose/user.model';
 import UserController from './controllers/user.controller';
+import Logger from '../../outbound/loggers/winston/logger';
 
 export class Container {
     public readonly userRepository: UserRepository;
@@ -11,13 +12,15 @@ export class Container {
     public readonly createUserUseCase: CreateUserUseCase;
     public readonly getAllUsersUseCase: GetAllUsersUseCase;
     public readonly userController: UserController;
+    public readonly logger: Logger;
 
     constructor() {
-        this.userRepository = new UserRepository(UserModel);
-        this.userService = new UserService(this.userRepository);
-        this.createUserUseCase = new CreateUserUseCase(this.userService);
-        this.getAllUsersUseCase = new GetAllUsersUseCase(this.userService);
-        this.userController = new UserController(this.createUserUseCase, this.getAllUsersUseCase);
+        this.logger = new Logger();
+        this.userRepository = new UserRepository(this.logger, UserModel);
+        this.userService = new UserService(this.logger, this.userRepository);
+        this.createUserUseCase = new CreateUserUseCase(this.logger, this.userService);
+        this.getAllUsersUseCase = new GetAllUsersUseCase(this.logger, this.userService);
+        this.userController = new UserController(this.logger, this.createUserUseCase, this.getAllUsersUseCase);
     }
 }
 

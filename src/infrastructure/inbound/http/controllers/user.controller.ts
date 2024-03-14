@@ -6,9 +6,11 @@ import { Request, Response } from 'express';
 import GetAllUsersUseCase from '../../../../application/use-cases/user/get-all-users';
 import userValidatonSchema from '../validation/users.schema';
 import { formatResponse, IResponse, IDataObject } from '../utils/response';
+import Logger from '../../../../domain/loggers/logger.interface';
 
 export default class UserController {
     constructor(
+        private readonly Logger: Logger,
         public readonly createUserUseCase: CreateUserUseCase,
         public readonly getAllUsersUseCase: GetAllUsersUseCase,
     ) {}

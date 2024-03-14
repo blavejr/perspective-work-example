@@ -6,6 +6,7 @@ import { CreateUserDTO } from "../../../application/use-cases/user/create-user";
 import CreateUserUseCase from "./create-user";
 
 import { jest, describe, test, expect, beforeAll } from '@jest/globals';
+import Logger from "../../../domain/loggers/logger.interface";
 
 jest.mock("../../../infrastructure/outbound/database/mongoose/user.repository");
 jest.mock("../../../infrastructure/outbound/database/mongoose/user.model");
@@ -26,15 +27,42 @@ const mockUserInstance = new User(
     mockDTO.password,
 );
 
+class MockLogger implements Logger {
+    error(message: string) {
+        console.error(message);
+    }
+
+    info(message: string) {
+        console.log(message);
+    }
+
+    warn(message: string) {
+        console.warn(message);
+    }
+
+    debug(message: string) {
+        console.debug(message);
+    }
+
+    log(message: string) {
+        console.log(message);
+    }
+
+    verbose(message: string): void {
+        console.log(message);
+    }
+}
+
 describe('CreateUserUseCase', () => {
     let userRepository: UserRepository;
     let userService: UserService;
     let createUserUseCase: CreateUserUseCase;
 
     beforeAll(() => {
-        userRepository = new UserRepository(UserModel);
-        userService = new UserService(userRepository);
-        createUserUseCase = new CreateUserUseCase(userService);
+        const logger = new MockLogger();
+        userRepository = new UserRepository(logger, UserModel);
+        userService = new UserService(logger, userRepository);
+        createUserUseCase = new CreateUserUseCase(logger, userService);
     });
 
     describe('execute', () => {

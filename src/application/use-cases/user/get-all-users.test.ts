@@ -4,9 +4,9 @@ import UserService from '../../../application/services/user.service';
 import User from '../../../domain/entities/user';
 import { getUsersDTO } from '../../../application/use-cases/user/get-all-users';
 import GetAllUsersUseCase from './get-all-users';
-import bcrypt from 'bcrypt';
 
 import { jest, describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
+import Logger from '../../../domain/loggers/logger.interface';
 
 jest.mock('../../../infrastructure/outbound/database/mongoose/user.repository');
 jest.mock('../../../infrastructure/outbound/database/mongoose/user.model');
@@ -32,15 +32,42 @@ const dto: getUsersDTO = {
     created_at: -1,
 };
 
+class MockLogger implements Logger {
+    error(message: string) {
+        console.error(message);
+    }
+
+    info(message: string) {
+        console.log(message);
+    }
+
+    warn(message: string) {
+        console.warn(message);
+    }
+
+    debug(message: string) {
+        console.debug(message);
+    }
+
+    log(message: string) {
+        console.log(message);
+    }
+
+    verbose(message: string): void {
+        console.log(message);
+    }
+}
+
 describe('GetAllUsersUseCase', () => {
     let userRepository: UserRepository;
     let userService: UserService;
     let getAllUsersUseCase: GetAllUsersUseCase;
 
     beforeAll(() => {
-        userRepository = new UserRepository(UserModel);
-        userService = new UserService(userRepository);
-        getAllUsersUseCase = new GetAllUsersUseCase(userService);
+        const logger = new MockLogger();
+        userRepository = new UserRepository(logger, UserModel);
+        userService = new UserService(logger, userRepository);
+        getAllUsersUseCase = new GetAllUsersUseCase(logger, userService);
         jest.clearAllMocks();
     });
 

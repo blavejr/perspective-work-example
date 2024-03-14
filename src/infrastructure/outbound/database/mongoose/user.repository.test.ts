@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import User from '../../../../domain/entities/user';
 import UserRepository from './user.repository';
+import Logger from '../../loggers/winston/logger';
 import UserModel from './user.model';
 import bcrypt from 'bcrypt';
 
@@ -11,7 +12,10 @@ import {
     expect,
     beforeAll,
     afterAll,
+    jest,
 } from '@jest/globals';
+
+jest.mock('../../loggers/winston/logger');
 
 let mongoServer: MongoMemoryServer;
 let userRepository: UserRepository;
@@ -37,7 +41,8 @@ beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
-    userRepository = new UserRepository(UserModel);
+    const logger = new Logger();
+    userRepository = new UserRepository(logger, UserModel);
 });
 
 afterAll(async () => {

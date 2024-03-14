@@ -10,7 +10,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 app.options('*', cors());
-// TODO: this should be injected into the express app and other classes in the container
+
 app.use(LogRequestsMiddleware);
 
 app.use(express.urlencoded({ extended: true }));

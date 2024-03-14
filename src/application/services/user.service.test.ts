@@ -4,6 +4,7 @@ import User from '../../domain/entities/user';
 import { CreateUserDTO } from '../use-cases/user/create-user';
 import { getUsersDTO } from '../use-cases/user/get-all-users';
 import { describe, beforeEach, test, expect, jest } from '@jest/globals';
+import Logger from '../../domain/loggers/logger.interface';
 
 // Since the actual implementation of the repository is not important for this test, we can create an in-memory mock repository
 class MockRepository implements Repository<User> {
@@ -16,6 +17,32 @@ class MockRepository implements Repository<User> {
 
     async findAll(options: any): Promise<User[]> {
         return this.users;
+    }
+}
+
+class MockLogger implements Logger {
+    error(message: string) {
+        console.error(message);
+    }
+
+    info(message: string) {
+        console.log(message);
+    }
+
+    warn(message: string) {
+        console.warn(message);
+    }
+
+    debug(message: string) {
+        console.debug(message);
+    }
+
+    log(message: string) {
+        console.log(message);
+    }
+
+    verbose(message: string): void {
+        console.log(message);
     }
 }
 
@@ -36,7 +63,8 @@ describe('UserService', () => {
 
     beforeEach(() => {
         mockRepository = new MockRepository();
-        userService = new UserService(mockRepository);
+        const mockLogger = new MockLogger();
+        userService = new UserService(mockLogger, mockRepository);
     });
 
     test('createUser method should save a new user', async () => {
@@ -63,7 +91,7 @@ describe('UserService', () => {
         // Add some users to the repository
         const user1 = await userService.createUser(mockCreateUserDTO);
         const user2 = await userService.createUser(mockCreateUserDTO);
-        
+
         // retrieve all users
         const allUsers = await userService.getAllUsers(mockGetUsersDTO);
 
@@ -73,7 +101,9 @@ describe('UserService', () => {
 
         // Check if the repository's findAll method was called with the correct options
         expect(repositoryFindAllSpy).toBeCalledTimes(1);
-        expect(repositoryFindAllSpy).toBeCalledWith({ sort: { created_at: mockGetUsersDTO.created_at } });
+        expect(repositoryFindAllSpy).toBeCalledWith({
+            sort: { created_at: mockGetUsersDTO.created_at },
+        });
 
         expect(allUsers.length).toBe(2);
         expect(allUsers[0].toJSON()).toHaveProperty('uId');
