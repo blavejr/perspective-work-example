@@ -112,11 +112,13 @@ If the result is a single object
 
 ```
 {
-    "firstName": "asdasd",
-    "lastName": "dkfsdf",
-    "email": "as53@s.com",
-    "created_at": "2024-03-14T10:21:16.861Z",
-    "uId": "c85194c6-96f9-4376-9017-cba683c760fb",
+    "data": {
+        "firstName": "asdasd",
+        "lastName": "dkfsdf",
+        "email": "as53@s.com",
+        "created_at": "2024-03-14T10:34:29.913Z",
+        "uId": "bb14d64d-e750-4dc8-9a7f-6d4d67d95441"
+    },
     "message": "Success"
 }
 ```
@@ -124,24 +126,24 @@ If the result is a single object
 If the result is an Array
 ```
 {
-    "items": [
+    "data": [
         {
             "firstName": "asdasd",
             "lastName": "dkfsdf",
             "email": "as53@s.com",
             "created_at": "2024-03-14T10:04:47.082Z",
-            "uId": "d7759317-f264-48e8-99e4-ce4fb09fc26c"
+            "uId": "1c6eea12-fef5-4c06-ac61-95071e8a0b12"
         },
         {
             "firstName": "asdasd",
             "lastName": "dkfsdf",
             "email": "as53@s.com",
             "created_at": "2024-03-14T10:05:34.320Z",
-            "uId": "00781c84-d4cc-4694-81b7-e2726fac2d7b"
+            "uId": "32002771-1fd3-4821-b931-a0f746166cfa"
         }
     ],
-    "message": "Success",
-    "count": 2
+    "count": 2,
+    "message": "Success"
 }
 ```
 

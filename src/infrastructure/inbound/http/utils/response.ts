@@ -3,14 +3,18 @@ export interface IDataObject {
 }
 
 export interface IResponse {
-    items?: any[];
+    data: IDataObject | Array<IDataObject>;
     count?: number;
     message: string;
 }
 
-export function formatResponse(data: IDataObject, message: string = 'Success'): IResponse {
+export function formatResponse(data: IDataObject, message:string = 'Success'): IResponse {
     if (Array.isArray(data)) {
-        return { items: data, message, count: data.length };
+        return {
+            data,
+            count: data.length,
+            message,
+        };
     }
-    return { ...data, message };
+    return { data, message };
 }
