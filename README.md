@@ -179,6 +179,7 @@ If you are using docker
 - application container on port `4111`
 
 If you are running the app on your local machine
+
 5. make sure your have a mongoDB running on `localhost:27017`
 
 # Using Docker
