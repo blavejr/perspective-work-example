@@ -8,9 +8,6 @@ export default function errorHandler(err: Error, req: Request, res: Response, ne
 
     let statusCode = 500;
     let errorMessage: string | Array<String> = 'Internal Server Error';
-    console.log(typeof err);
-    console.log((err instanceof MongoServerError));
-    
     
     if (err instanceof ValidationError) {
         statusCode = 400;
@@ -21,8 +18,6 @@ export default function errorHandler(err: Error, req: Request, res: Response, ne
     }else if (err instanceof MongoServerError) {
         statusCode = 500;
         errorMessage = err.message;
-        // console.log(err);
-        // console.log(err.code);
         
         if (err.code === 11000){
             statusCode = 409
