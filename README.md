@@ -91,8 +91,10 @@ The server is setup in a pretty standard manner
 - routes
 - middleware
 - utils
+- validation
 - app.ts
 - server.ts
+- container.ts
 
 since we are using dependency injection
 we have a container class which will setup all the
@@ -103,7 +105,12 @@ for this controller by looking at the instance type.
 this way we can automatically inject all decencies right into the
 system when we start up the server.
 
-Example: you create a booking via REST. The controller gathers the input and invokes a "reserveRoom" use case in Booking bounded context. The use case, in turn, calls the AvailabilityService in Availability bounded context to decrement the number of available rooms and PaymentService to check the validity of the credit card.
+# Example: inbound data
+you create a user via REST POST /user.
+The controller gathers the data describing 
+your user and invokes a "create-user" use case 
+in the User context. The use case, in turn, calls the UserService in
+
 
 # Getting Started
 1. setup your environment, copy the `.env.example` to a new file `.env`
