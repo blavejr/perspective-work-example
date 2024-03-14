@@ -16,8 +16,13 @@ This project skeleton contains a basic Express setup one endpoint to create a us
 Feel free to add or change this project as you like.
 
 # My changes
-1. Use Hexagonal/Clean Architecture
-- It helps to organize code in a modular, testable and maintainable way.
+i have refactored the app to use Hexagonal/Clean Architecture
+a with the idea being to demonstrate an understanding of
+software design paradigms.
+
+clean architecture attempts to break down code into different
+units that do one very specific thing, keep them Modular and maintainable
+
 
 # Directory Strucuture
  - Application
@@ -34,6 +39,25 @@ Feel free to add or change this project as you like.
         - http
     - outbound
         - database
+
+
+
+# Application layer
+
+files in Application layer deal with data manipulation and business logic
+these are services and use-cases.
+
+in this example use-cases are the meat of the application
+they gather information from different services, do transforms
+and pass the data to either a user or to a service.
+
+services are more like data transport, moving data from use-cases
+to data stores or from data stores to use cases, in the form of  entities.
+services can also perform some business logic but rather offload this information to
+the use-cases or to entities themselves. services will most likely instantiate an entity
+and cary the information in that form.
+
+
 
 Example: you create a booking via REST. The controller gathers the input and invokes a "reserveRoom" use case in Booking bounded context. The use case, in turn, calls the AvailabilityService in Availability bounded context to decrement the number of available rooms and PaymentService to check the validity of the credit card.
 
