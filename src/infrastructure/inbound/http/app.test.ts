@@ -39,22 +39,22 @@ describe('Express App', () => {
         it('creates a new user POST /user', async () => {
             const response = await supertest(app).post('/user').send(mockUser);
             expect(response.status).toBe(201);
-            expect(response.body).toHaveProperty('uId');
-            expect(response.body).toHaveProperty('firstName', mockUser.firstName);
-            expect(response.body).toHaveProperty('lastName', mockUser.lastName);
-            expect(response.body).toHaveProperty('email', mockUser.email);
-            expect(response.body).not.toHaveProperty('password');
+            expect(response.body.data).toHaveProperty('uId');
+            expect(response.body.data).toHaveProperty('firstName', mockUser.firstName);
+            expect(response.body.data).toHaveProperty('lastName', mockUser.lastName);
+            expect(response.body.data).toHaveProperty('email', mockUser.email);
+            expect(response.body.data).not.toHaveProperty('password');
         });
 
         it('gets all the users in the database GET /user', async () => {
             const response = await supertest(app).get('/user');
             expect(response.status).toBe(200);
-            expect(response.body.items).toHaveLength(1);
-            expect(response.body.items[0]).toHaveProperty('uId');
-            expect(response.body.items[0]).toHaveProperty('firstName', mockUser.firstName);
-            expect(response.body.items[0]).toHaveProperty('lastName', mockUser.lastName);
-            expect(response.body.items[0]).toHaveProperty('email', mockUser.email);
-            expect(response.body.items[0]).not.toHaveProperty('password');
+            expect(response.body.data).toHaveLength(1);
+            expect(response.body.data[0]).toHaveProperty('uId');
+            expect(response.body.data[0]).toHaveProperty('firstName', mockUser.firstName);
+            expect(response.body.data[0]).toHaveProperty('lastName', mockUser.lastName);
+            expect(response.body.data[0]).toHaveProperty('email', mockUser.email);
+            expect(response.body.data[0]).not.toHaveProperty('password');
         });
     });
 });
