@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "1f1ef2c3-c07d-43b7-91cd-7db55e973bf2",
+		"name": "Perspective",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1982435"
+	},
+	"item": [
+		{
+			"name": "users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4111/user?created=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4111",
+					"path": [
+						"user"
+					],
+					"query": [
+						{
+							"key": "created",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "asdasd",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "dkfsdf",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "as53@s.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4111/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4111",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
