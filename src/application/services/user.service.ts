@@ -7,7 +7,7 @@ import { getUsersDTO } from '../use-cases/user/get-all-users';
 
 export default class UserService {
     constructor(
-        private readonly Logger: Logger,
+        public readonly logger: Logger,
         public readonly userRepository: Repository<User>
         ) { }
 

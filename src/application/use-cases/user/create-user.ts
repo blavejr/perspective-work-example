@@ -15,7 +15,7 @@ export interface CreateUserDTO {
 
 export default class CreateUserUseCase implements UseCase {
     constructor(
-        private readonly Logger: Logger,
+        private readonly logger: Logger,
         public readonly userService: UserService
         ) {}
 

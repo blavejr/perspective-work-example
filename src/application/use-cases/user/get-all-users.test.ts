@@ -1,114 +1,52 @@
-import UserRepository from '../../../infrastructure/outbound/database/mongoose/user.repository';
-import UserModel from '../../../infrastructure/outbound/database/mongoose/user.model';
-import UserService from '../../../application/services/user.service';
-import User from '../../../domain/entities/user';
-import { getUsersDTO } from '../../../application/use-cases/user/get-all-users';
 import GetAllUsersUseCase from './get-all-users';
+import { mockGetUsersDTO, MockRepository, MockLogger, MockUserService, mockNewUser, mockUserJson, mockCreateUserDTO } from '../../../__mocks__/index';
+import { jest, describe, test, expect } from '@jest/globals';
 
-import { jest, describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
-import Logger from '../../../domain/loggers/logger.interface';
-
-jest.mock('../../../infrastructure/outbound/database/mongoose/user.repository');
-jest.mock('../../../infrastructure/outbound/database/mongoose/user.model');
-jest.mock('../../../application/services/user.service');
-
-const mockUser = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@mail.com',
-    password: 'Password123',
-    created_at: new Date(),
-};
-
-const mockUserInstance = new User(
-    mockUser.firstName,
-    mockUser.lastName,
-    mockUser.email,
-    mockUser.created_at,
-    mockUser.password,
-);
-
-const dto: getUsersDTO = {
-    created_at: -1,
-};
-
-class MockLogger implements Logger {
-    error(message: string) {
-        console.error(message);
-    }
-
-    info(message: string) {
-        console.log(message);
-    }
-
-    warn(message: string) {
-        console.warn(message);
-    }
-
-    debug(message: string) {
-        console.debug(message);
-    }
-
-    log(message: string) {
-        console.log(message);
-    }
-
-    verbose(message: string): void {
-        console.log(message);
-    }
-}
+const logger = new MockLogger();
+const userRepository = new MockRepository();
+const userService = new MockUserService(logger, userRepository);
+const getAllUsersUseCase = new GetAllUsersUseCase(logger, userService);
 
 describe('GetAllUsersUseCase', () => {
-    let userRepository: UserRepository;
-    let userService: UserService;
-    let getAllUsersUseCase: GetAllUsersUseCase;
-
-    beforeAll(() => {
-        const logger = new MockLogger();
-        userRepository = new UserRepository(logger, UserModel);
-        userService = new UserService(logger, userRepository);
-        getAllUsersUseCase = new GetAllUsersUseCase(logger, userService);
-        jest.clearAllMocks();
-    });
-
     describe('execute', () => {
         test('Should call the execute function', async () => {
-            const executeSpy = jest.spyOn(getAllUsersUseCase, 'execute').mockResolvedValue([mockUserInstance.toJSON()]);
-            const users = await getAllUsersUseCase.execute(dto);
+            const executeSpy = jest.spyOn(getAllUsersUseCase, 'execute').mockResolvedValue([mockNewUser.toJSON()]);
+            const users = await getAllUsersUseCase.execute(mockGetUsersDTO);
 
-            expect(executeSpy).toHaveBeenCalledWith(dto);
+            expect(executeSpy).toHaveBeenCalledWith(mockGetUsersDTO);
             expect(executeSpy).toHaveBeenCalledTimes(1);
 
             expect(users).toBeInstanceOf(Array);
             expect(users.length).toBe(1);
-            expect(typeof users[0]).toBe(typeof mockUserInstance.toJSON());
+            expect(typeof users[0]).toBe(typeof mockNewUser.toJSON());
             executeSpy.mockRestore();
         });
 
         test('should call the getAllUsers function on the UserService', async () => {
-            const getAllUsersSpy = jest.spyOn(getAllUsersUseCase.userService, 'getAllUsers').mockResolvedValue([mockUserInstance]);
-            await getAllUsersUseCase.execute(dto);
+            const getAllUsersSpy = jest.spyOn(getAllUsersUseCase.userService, 'getAllUsers');
+            await getAllUsersUseCase.execute(mockGetUsersDTO);
             expect(getAllUsersSpy).toHaveBeenCalledTimes(1);
-            expect(getAllUsersSpy).toHaveBeenCalledWith(dto);
+            expect(getAllUsersSpy).toHaveBeenCalledWith(mockGetUsersDTO);
             getAllUsersSpy.mockRestore();
         });
 
         test('should check that execute function returns correct data', async () => {
             // The correct data is returned by the service
-            const getAllUsersSpy = jest.spyOn(userService, 'getAllUsers').mockResolvedValue([mockUserInstance]);
-            
+            const getAllUsersSpy = jest.spyOn(userService, 'getAllUsers');
+            // Add a user to the store so we can check if the use case returns it
+            await userService.createUser(mockCreateUserDTO);
             // The correct data is given to the use case
-            const users = await getAllUsersUseCase.execute(dto);
+            const users = await getAllUsersUseCase.execute(mockGetUsersDTO);
 
             // Check that the use case does the correct thing with the data
-            expect(users).toEqual([mockUserInstance.toJSON()]);
+            expect(users).toEqual([mockNewUser.toJSON()]);
 
-            expect(users[0]).toMatchObject(mockUserInstance.toJSON());
-            expect(users[0].firstName).toBe(mockUser.firstName);
-            expect(users[0].lastName).toBe(mockUser.lastName);
-            expect(users[0].email).toBe(mockUser.email);
-            expect(users[0].password).not.toBe(mockUser.password);
-            expect(users[0].created_at).toBe(mockUser.created_at);
+            expect(users[0]).toMatchObject(mockNewUser.toJSON());
+            expect(users[0].firstName).toBe(mockUserJson.firstName);
+            expect(users[0].lastName).toBe(mockUserJson.lastName);
+            expect(users[0].email).toBe(mockUserJson.email);
+            expect(users[0].password).not.toBe(mockUserJson.password);
+            expect(users[0].created_at).toBe(mockUserJson.created_at);
 
             getAllUsersSpy.mockRestore();
         });

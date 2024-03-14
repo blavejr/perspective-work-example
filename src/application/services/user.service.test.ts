@@ -1,61 +1,8 @@
 import UserService from './user.service';
 import Repository from '../../domain/repositories/repository.interface';
 import User from '../../domain/entities/user';
-import { CreateUserDTO } from '../use-cases/user/create-user';
-import { getUsersDTO } from '../use-cases/user/get-all-users';
 import { describe, beforeEach, test, expect, jest } from '@jest/globals';
-import Logger from '../../domain/loggers/logger.interface';
-
-// Since the actual implementation of the repository is not important for this test, we can create an in-memory mock repository
-class MockRepository implements Repository<User> {
-    private users: User[] = [];
-
-    async save(entity: User): Promise<User> {
-        this.users.push(entity);
-        return entity;
-    }
-
-    async findAll(options: any): Promise<User[]> {
-        return this.users;
-    }
-}
-
-class MockLogger implements Logger {
-    error(message: string) {
-        console.error(message);
-    }
-
-    info(message: string) {
-        console.log(message);
-    }
-
-    warn(message: string) {
-        console.warn(message);
-    }
-
-    debug(message: string) {
-        console.debug(message);
-    }
-
-    log(message: string) {
-        console.log(message);
-    }
-
-    verbose(message: string): void {
-        console.log(message);
-    }
-}
-
-const mockCreateUserDTO: CreateUserDTO = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    password: 'Password123',
-};
-
-const mockGetUsersDTO: getUsersDTO = {
-    created_at: -1,
-};
+import { mockCreateUserDTO, mockGetUsersDTO, MockRepository, MockLogger } from '../../__mocks__/index';
 
 describe('UserService', () => {
     let userService: UserService;
