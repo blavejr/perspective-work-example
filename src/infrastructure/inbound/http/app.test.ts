@@ -49,12 +49,12 @@ describe('Express App', () => {
         it('gets all the users in the database GET /user', async () => {
             const response = await supertest(app).get('/user');
             expect(response.status).toBe(200);
-            expect(response.body).toHaveLength(1);
-            expect(response.body[0]).toHaveProperty('uId');
-            expect(response.body[0]).toHaveProperty('firstName', mockUser.firstName);
-            expect(response.body[0]).toHaveProperty('lastName', mockUser.lastName);
-            expect(response.body[0]).toHaveProperty('email', mockUser.email);
-            expect(response.body[0]).not.toHaveProperty('password');
+            expect(response.body.items).toHaveLength(1);
+            expect(response.body.items[0]).toHaveProperty('uId');
+            expect(response.body.items[0]).toHaveProperty('firstName', mockUser.firstName);
+            expect(response.body.items[0]).toHaveProperty('lastName', mockUser.lastName);
+            expect(response.body.items[0]).toHaveProperty('email', mockUser.email);
+            expect(response.body.items[0]).not.toHaveProperty('password');
         });
     });
 });

@@ -105,7 +105,47 @@ for this controller by looking at the instance type.
 this way we can automatically inject all decencies right into the
 system when we start up the server.
 
-I actually forgot to add pagination and formatted responses 😬
+# API Response
+the api responses are formated as follows
+
+If the result is a single object
+
+```
+{
+    "firstName": "asdasd",
+    "lastName": "dkfsdf",
+    "email": "as53@s.com",
+    "created_at": "2024-03-14T10:21:16.861Z",
+    "uId": "c85194c6-96f9-4376-9017-cba683c760fb",
+    "message": "Success"
+}
+```
+
+If the result is an Array
+```
+{
+    "items": [
+        {
+            "firstName": "asdasd",
+            "lastName": "dkfsdf",
+            "email": "as53@s.com",
+            "created_at": "2024-03-14T10:04:47.082Z",
+            "uId": "d7759317-f264-48e8-99e4-ce4fb09fc26c"
+        },
+        {
+            "firstName": "asdasd",
+            "lastName": "dkfsdf",
+            "email": "as53@s.com",
+            "created_at": "2024-03-14T10:05:34.320Z",
+            "uId": "00781c84-d4cc-4694-81b7-e2726fac2d7b"
+        }
+    ],
+    "message": "Success",
+    "count": 2
+}
+```
+
+I did not add pagination yet to this example but I plan to
 
 # Example: inbound data
 you create a user via REST POST /user.
