@@ -173,9 +173,10 @@ malformed data
 3. run the tests `npm run test`
 
 If you are using docker
+
 4. build and run the containers `docker-compose up -d` or `docker-compose up` if you like logs
-    - mongo container on port `27017`
-    - application container on port `4111`
+- mongo container on port `27017`
+- application container on port `4111`
 
 If you are running the app on your local machine
 5. make sure your have a mongoDB running on `localhost:27017`
